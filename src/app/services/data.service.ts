@@ -14,4 +14,9 @@ export class DataService {
     this.shows.push(new Show(4, 'The Witcher'));
     this.shows.push(new Show(5, 'Versuch'));
   }
+
+  saveShow(show: Show): void {
+    this.shows.push(show);
+  }
+
 }
