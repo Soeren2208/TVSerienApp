@@ -3,14 +3,47 @@
   <tr>
     <th>Id</th>
     <th>Serientitel</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
   </tr>
   </thead>
   <tbody>
-  @for(show of shows; track show.id){
-    <tr>
-      <td>{{show.id}}</td>
-      <td>{{show.title}}</td>
-    </tr>
-  }
+    @for(show of shows; track show.id){
+      @if(isToEdit(show)){
+        <td>
+          <input
+            class="form-control"
+            id="newShowId"
+            name = "newShowId"
+            type = number
+            [(ngModel)]="show.id"
+          >
+        </td>
+        <td>
+          <input
+            class="form-control"
+            id="newShowTitle"
+            name="newShowTitle"
+            type = string
+            [(ngModel)]="show.title"
+          >
+        </td>
+        <td colspan="2">
+          <button class="material-icons" (click)="saveEdit()">save</button>
+        </td>
+      }
+      @else{
+        <tr>
+          <td>{{show.id}}</td>
+          <td>{{show.title}}</td>
+          <td>
+            <button class="material-icons" (click)="edit(show)">edit</button>
+          </td>
+          <td>
+            <button class="material-icons" (click)="delete(show)">delete</button>
+          </td>
+        </tr>
+      }
+    }
   </tbody>
 </table>

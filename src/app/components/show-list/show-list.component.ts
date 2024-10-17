@@ -1,14 +1,43 @@
 import {Component, Input} from '@angular/core';
 import {Show} from '../../model/show';
+import {DataService} from '../../services/data.service';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-show-list',
   standalone: true,
-  imports: [],
+  imports: [
+    FormsModule
+  ],
   templateUrl: './show-list.component.html',
   styleUrl: './show-list.component.css'
 })
 export class ShowListComponent {
   @Input() shows: Show[] =[];
+  editShow: Show = null;
 
+  constructor(private service: DataService){}
+
+  edit(show: Show){
+    this.editShow = show;
+  }
+
+  isToEdit(show: Show): boolean {
+    if (!this.editShow) {
+      return false;
+    } else if (this.editShow !== show) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  saveEdit(){
+    this.service.updateShow(this.editShow);
+    this.editShow = null;
+  }
+
+  delete(show: Show){
+    this.service.deleteShow(show);
+  }
 }

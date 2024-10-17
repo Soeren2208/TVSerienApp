@@ -19,4 +19,13 @@ export class DataService {
     this.shows.push(show);
   }
 
+  updateShow(show: Show): void{
+    this.shows = this.shows.filter(s => s !== show);
+    this.shows.push(show);
+    this.shows.sort((a, b)=> a.id - b.id);
+  }
+
+  deleteShow(show: Show){
+    this.shows = this.shows.filter(s => show!== s);
+  }
 }
