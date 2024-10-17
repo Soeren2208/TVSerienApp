@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Show} from '../../model/show';
 import {DataService} from '../../services/data.service';
 import {FormsModule} from '@angular/forms';
@@ -14,6 +14,7 @@ import {FormsModule} from '@angular/forms';
 })
 export class ShowListComponent {
   @Input() shows: Show[] =[];
+  @Output() selectedShow = new EventEmitter<Show>();
   editShow: Show = null;
 
   constructor(private service: DataService){}
@@ -39,5 +40,9 @@ export class ShowListComponent {
 
   delete(show: Show){
     this.service.deleteShow(show);
+  }
+
+  showDetails(show: Show){
+    this.selectedShow.emit(show);
   }
 }

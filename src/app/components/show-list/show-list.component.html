@@ -34,8 +34,8 @@
       }
       @else{
         <tr>
-          <td>{{show.id}}</td>
-          <td>{{show.title}}</td>
+          <td (click)="showDetails(show)">{{show.id}}</td>
+          <td (click)="showDetails(show)">{{show.title}}</td>
           <td>
             <button class="material-icons" (click)="edit(show)">edit</button>
           </td>
