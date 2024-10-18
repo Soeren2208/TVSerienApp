@@ -4,7 +4,7 @@ import {DataService} from '../../services/data.service';
 import {Show} from '../../model/show';
 import {ShowFormComponent} from '../show-form/show-form.component';
 import {ApiService} from '../../services/api.service';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, catchError, EMPTY, Subject} from 'rxjs';
 import {ShowDetailsComponent} from '../show-detail/show-detail.component';
 
 @Component({
@@ -20,6 +20,7 @@ import {ShowDetailsComponent} from '../show-detail/show-detail.component';
 })
 export class MainViewComponent {
   selectedShow$: BehaviorSubject<Show>;
+  errorMessage$: Subject<string>;
   isShowSelected = false;
 
   get shows(): Show[]{
@@ -28,13 +29,19 @@ export class MainViewComponent {
 
   constructor(private dataService: DataService, private apiService: ApiService){
     this.selectedShow$ = new BehaviorSubject<Show>(null);
+    this.errorMessage$ = new Subject<string>();
   }
 
-  onSelectedShow(show: Show){
-    this.apiService.getDetailShow(show.title).subscribe((s) =>{
-      this.selectedShow$.next(s);
+  onSelectedShow(show: Show) {
+    this.apiService.getDetailShow(show.title).pipe(
+      catchError((err) => {
+        this.errorMessage$.next(err.message);
+        this.selectedShow$.next(null);
+        return EMPTY;       })
+    ).subscribe((s: Show) => {
+        this.selectedShow$.next(s);
+        this.errorMessage$.next(null);
     });
     this.isShowSelected = true;
-    console.log(this.selectedShow$);
   }
 }

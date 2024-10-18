@@ -1,3 +1,11 @@
+@if(errorMessage$ |async; as errorMessage){
+  <ng-container>
+    <div class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  </ng-container>
+}
+
 @if(detailShow$ | async; as detailShow){
   <div class="card">
     <img class="card-img-top" img-fluid src={{detailShow.image}}>
