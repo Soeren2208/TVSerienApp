@@ -1,31 +1,39 @@
 import { Injectable } from '@angular/core';
-import {Show} from '../model/show';
+import { Show } from '../model/show';
+import { Observable } from 'rxjs';
+import { Firestore, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, query, orderBy } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  shows: Show[] = [];
+  shows$: Observable<Show[]>;
+  private seriesCollection = 'table_show';
 
-  constructor() {
-    this.shows.push(new Show(1, 'Vikings'));
-    this.shows.push(new Show(2, 'Friends'));
-    this.shows.push(new Show(3, 'Downton Abbey'));
-    this.shows.push(new Show(4, 'The Witcher'));
-    this.shows.push(new Show(5, 'Versuch'));
+  constructor(private firestore: Firestore) {
+    const showsRef = collection(this.firestore, this.seriesCollection);
+    const showsQuery = query(showsRef, orderBy('id'));
+    this.shows$ = collectionData(showsQuery, { idField: 'uid' }) as Observable<Show[]>;
   }
 
   saveShow(show: Show): void {
-    this.shows.push(show);
+    const showsRef = collection(this.firestore, this.seriesCollection);
+    addDoc(showsRef, {
+      id: show.id,
+      title: show.title,
+    });
   }
 
-  updateShow(show: Show): void{
-    this.shows = this.shows.filter(s => s !== show);
-    this.shows.push(show);
-    this.shows.sort((a, b)=> a.id - b.id);
+  updateShow(show: Show): void {
+    const showDocRef = doc(this.firestore, `${this.seriesCollection}/${show.uid}`);
+    updateDoc(showDocRef, {
+      id: show.id,
+      title: show.title,
+    });
   }
 
-  deleteShow(show: Show){
-    this.shows = this.shows.filter(s => show!== s);
+  deleteShow(show: Show): void {
+    const showDocRef = doc(this.firestore, `${this.seriesCollection}/${show.uid}`);
+    deleteDoc(showDocRef);
   }
 }

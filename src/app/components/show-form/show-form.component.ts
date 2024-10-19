@@ -13,12 +13,12 @@ import {DataService} from '../../services/data.service';
 export class ShowFormComponent {
   show: Show;
   constructor(private dataService: DataService){
-    this.show = new Show(null, null);
+    this.show = new Show(null, null, null);
   }
 
   public save(): void{
     this.dataService.saveShow(this.show);
-    this.show = new Show(null, null);
+    this.show = new Show(null, null, null);
   }
 
 }

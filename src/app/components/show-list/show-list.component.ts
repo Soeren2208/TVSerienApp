@@ -2,18 +2,21 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Show} from '../../model/show';
 import {DataService} from '../../services/data.service';
 import {FormsModule} from '@angular/forms';
+import { Observable } from 'rxjs';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-show-list',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    AsyncPipe
   ],
   templateUrl: './show-list.component.html',
   styleUrl: './show-list.component.css'
 })
 export class ShowListComponent {
-  @Input() shows: Show[] =[];
+  @Input() shows$: Observable<Show[]>;
   @Output() selectedShow = new EventEmitter<Show>();
   editShow: Show = null;
 

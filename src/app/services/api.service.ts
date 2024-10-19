@@ -14,7 +14,7 @@ export class ApiService {
 
   getDetailShow(title: string): Observable<Show>{
     const apiUrl = `${this.baseUrl}/singlesearch/shows?q=${title}`;
-    let show: Show = new Show(0, title);
+    let show: Show = new Show(null, 0, title);
     let errorMessage: string;
     return this.httpClient.get<ShowDTO>(apiUrl).pipe(
       catchError(err => {

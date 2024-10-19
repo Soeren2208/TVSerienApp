@@ -4,7 +4,7 @@ import {DataService} from '../../services/data.service';
 import {Show} from '../../model/show';
 import {ShowFormComponent} from '../show-form/show-form.component';
 import {ApiService} from '../../services/api.service';
-import {BehaviorSubject, catchError, EMPTY, Subject} from 'rxjs';
+import {BehaviorSubject, catchError, EMPTY, Observable, Subject} from 'rxjs';
 import {ShowDetailsComponent} from '../show-detail/show-detail.component';
 
 @Component({
@@ -23,8 +23,8 @@ export class MainViewComponent {
   errorMessage$: Subject<string>;
   isShowSelected = false;
 
-  get shows(): Show[]{
-    return this.dataService.shows;
+  get shows$(): Observable<Show[]>{
+    return this.dataService.shows$;
   }
 
   constructor(private dataService: DataService, private apiService: ApiService){
